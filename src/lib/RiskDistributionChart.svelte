@@ -11,7 +11,7 @@
     labels: ["High Risk", "Medium Risk", "Low Risk"],
     datasets: [
       {
-        label: "Number of Clients",
+        label: "Number of Patients",
         data: [
           clients.filter((c) => c.riskCategory === "HIGH").length,
           clients.filter((c) => c.riskCategory === "MEDIUM").length,
@@ -49,7 +49,7 @@
           },
           title: {
             display: true,
-            text: "Client Risk Distribution",
+            text: "Patient Risk Distribution",
             font: {
               size: 16,
               weight: "bold",
