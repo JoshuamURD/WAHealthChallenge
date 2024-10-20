@@ -136,13 +136,18 @@
                     <tr
                       class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-150"
                     >
-                      <td class="px-4 py-3 text-slate-800 flex items-center">
-                        <img
-                          src={client.avatar || "/placeholder-avatar.png"}
-                          alt={client.name}
-                          class="w-10 h-10 rounded-full mr-3 object-cover"
-                        />
-                        {client.name}
+                      <td class="px-4 py-3 text-slate-800">
+                        <a
+                          href="/{client.id}"
+                          class="flex items-center hover:underline"
+                        >
+                          <img
+                            src={client.avatar || "/placeholder-avatar.png"}
+                            alt={client.name}
+                            class="w-10 h-10 rounded-full mr-3 object-cover"
+                          />
+                          {client.name}
+                        </a>
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-1">
