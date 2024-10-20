@@ -1,15 +1,15 @@
 <script>
-  import { Breadcrumb, BreadcrumbItem, Button, Range, Heading, P } from 'flowbite-svelte';
+  import { Button, Range, Heading, P } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
-  import StepBubbles from './StepBubbles.svelte'; // Adjust the import path as needed
+  import StepBubbles from '$lib/StepBubbles.svelte';
 
   // State management
   let currentStep = 1;
   let responses = {
     nervous: 0, hopeless: 0, restless: 0,
-    depressed: 0, effort: 0, worthless: 1
+    depressed: 0, effort: 0, worthless: 0
   };
 
   // Color state for each step
@@ -84,7 +84,6 @@
     // Here you would typically send the data to a server
   }
 
-
   // Lifecycle
   onMount(() => {
     if (browser) {
@@ -104,33 +103,25 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 p-8">
   <div class="bg-white rounded-xl shadow-lg max-w-6xl mx-auto p-8">
     <header class="mb-12 text-center">
-      <Heading tag="h2" class="text-4xl font-bold text-slate-800 mb-2">
-        Kessler Psychological Distress Scale (K6)
+      <Heading tag="h2" class="text-4xl font-bold text-slate-800 mb-4">
+        Mental Health Questionnaire
       </Heading>
-      <P class="text-lg text-slate-600 max-w-2xl mx-auto">
-        The following questions ask about how you have been feeling during the 
-        <strong class="font-medium">past two weeks</strong>. 
-        For each question, please move the slider to the option that best describes 
-        how often you had this feeling.
-      </P>
+      <div class="space-y-4 max-w-2xl mx-auto"> 
+        <div class="bg-slate-50 border-l-4 border-slate-300 p-4 rounded-r-lg text-left shadow-sm">
+          <P class="text-slate-700 text-center mb-2">
+            <strong>Instructions:</strong>
+          </P>
+          <ol class="list-decimal list-outside text-slate-600 space-y-2 pl-5">
+            <li>For each question, move the slider to the most appropriate option.</li> 
+            <li>Your responses will provide valuable information to your mental health professional.</li>
+            <li>The options describe how often you've had a particular feeling in the past <strong>two weeks</strong>.</li>
+          </ol>
+        </div>
+      </div>
     </header>
 
     <nav class="mb-8">
-      <Breadcrumb>
-        {#each Array(TOTAL_STEPS) as _, index}
-          <BreadcrumbItem 
-            href="/" 
-            active={currentStep === index + 1}
-          >
-            <button 
-              on:click|preventDefault={() => navigateStep(index + 1)}
-              class="text-lg font-semibold cursor-pointer bg-transparent border-none p-0"
-            >
-              Step {index + 1}
-            </button>
-          </BreadcrumbItem>
-        {/each}
-      </Breadcrumb>
+      <StepBubbles {currentStep} totalSteps={TOTAL_STEPS} />
     </nav>
 
     <div class="space-y-6">
@@ -140,7 +131,15 @@
             <Heading class="text-center font-semibold text-xl text-slate-800 mb-4">
               {question.text}
             </Heading>
-            <div class="mb-4">
+            <div class="flex items-center justify-between mb-4">
+              {#each options as option}
+                <div class="text-center">
+                  <div class="text-2xl">{option.emoji}</div>
+                  <div class="text-xs mt-2 break-words text-slate-600">{option.label}</div>
+                </div>
+              {/each}
+            </div>
+            <div class="px-[10px]">
               <Range 
                 id={question.key} 
                 min={0} 
@@ -149,18 +148,10 @@
                 bind:value={responses[question.key]}
                 on:input={(e) => handleInput(question.key, e.target.value)}
                 on:change={(e) => handleChange(question.key, e.target.value)}
-                class="custom-range"
+                class="custom-range w-full"
                 style="--slider-hue: {colorState[currentStep][question.key]?.hue || 120}; 
                        --slider-percentage: {colorState[currentStep][question.key]?.percentage || 0}%;"
               />
-            </div>
-            <div class="flex justify-between text-sm">
-              {#each options as option}
-                <div class="text-center w-1/5">
-                  <div class="text-2xl">{option.emoji}</div>
-                  <div class="text-xs mt-2 break-words text-slate-600">{option.label}</div>
-                </div>
-              {/each}
             </div>
           </div>
         </div>

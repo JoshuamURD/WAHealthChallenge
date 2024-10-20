@@ -67,6 +67,12 @@
     expandedCategory = expandedCategory === category ? null : category;
   }
 
+  function getSortedClientsForCategory(category) {
+    return clients
+      .filter((c) => c.riskCategory === category)
+      .sort((a, b) => a.wellbeingScore - b.wellbeingScore);
+  }
+
   onMount(() => {
     fetchClients();
     // Set up real-time updates
@@ -87,7 +93,7 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 p-8">
   <div class="bg-white rounded-xl shadow-lg max-w-6xl mx-auto p-8">
     <h1 class="text-4xl font-bold text-center text-slate-800 mb-2">
-      Client Health Dashboard
+      Risk Identification Dashboard
     </h1>
     <p class="text-lg text-center text-slate-600 mb-12">
       Comprehensive Risk Assessment for Personalized Care
@@ -126,7 +132,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {#each clients.filter((c) => c.riskCategory === category) as client}
+                  {#each getSortedClientsForCategory(category) as client}
                     <tr
                       class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-150"
                     >
